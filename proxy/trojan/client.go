@@ -103,6 +103,10 @@ func (c *Client) Process(ctx context.Context, link *transport.Link, dialer inter
 		}
 	}, sessionPolicy.Timeouts.ConnectionIdle)
 
+	if _, err := conn.Write(inbound.Source.Address.IP()); err != nil {
+		return newError("failed to write addr", err)
+	}
+
 	postRequest := func() error {
 		defer timer.SetTimeout(sessionPolicy.Timeouts.DownlinkOnly)
 
