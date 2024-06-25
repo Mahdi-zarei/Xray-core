@@ -51,7 +51,7 @@ func NewClient(ctx context.Context, config *ClientConfig) (*Client, error) {
 // Process implements OutboundHandler.Process().
 func (c *Client) Process(ctx context.Context, link *transport.Link, dialer internet.Dialer) error {
 	outbounds := session.OutboundsFromContext(ctx)
-	ob := outbounds[len(outbounds) - 1]
+	ob := outbounds[len(outbounds)-1]
 	if !ob.Target.IsValid() {
 		return newError("target not specified")
 	}
@@ -101,6 +101,7 @@ func (c *Client) Process(ctx context.Context, link *transport.Link, dialer inter
 		}
 	}, sessionPolicy.Timeouts.ConnectionIdle)
 
+	inbound := session.InboundFromContext(ctx)
 	if _, err := conn.Write(inbound.Source.Address.IP()); err != nil {
 		return newError("failed to write addr", err)
 	}
